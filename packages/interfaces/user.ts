@@ -3,7 +3,9 @@ export interface User {
     name: string;
     email: string;
     password: string;
-    role: string;
+    totalAverageWeightRatings: number;
+    numberOfRents: number;
+    recentlyActive: number;
     created_at: Date;
     updated_at: Date;
 }

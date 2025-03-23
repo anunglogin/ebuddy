@@ -1,8 +1,7 @@
-import {User} from "../entities/user";
 import {db} from "../config/firebaseConfig";
 import { v7 as uuidv7 } from 'uuid';
-import {userController} from "../controller/api";
 import * as bcrypt from 'bcrypt';
+import {User} from "@repo/interfaces/user";
 
 const users: User[] = [];
 
@@ -27,6 +26,13 @@ export const userCollection = {
             return false;
         }
         return findUser.data();
+    },
+    getUserByEmail: async (email: string) => {
+        const findUser = await db.collection('users').where('email', '==', email).get();
+        if (findUser.size === 0) {
+            return false;
+        }
+        return findUser.docs[0].data();
     },
     getAllUsers: async (): Promise<User[]> => {
         const users: User[] = [];
