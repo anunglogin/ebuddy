@@ -15,13 +15,16 @@ import {
 import {useEffect, useState} from "react";
 import { User } from "@repo/interfaces/user";
 import {DeleteOutlineTwoTone, EditOutlined} from "@mui/icons-material";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setModal, setUser} from "../../store/actions";
 import HomeEdit from "../molecules/HomeEdit";
+import {RootState} from "../../store/store";
+import HomeAdd from "../molecules/HomeAdd";
 
 export default function HomeTable() {
     const [rows, setRows] = useState<User[]>([]);
     const dispatch = useDispatch();
+    const isOpen = useSelector((state: RootState) => state.modal);
 
     const fetchData = async () => {
         try {
@@ -65,12 +68,16 @@ export default function HomeTable() {
     }
 
     const handleEdit = (id: string) => {
-        dispatch(setModal(true));
+        dispatch(setModal({
+            openAdd: false,
+            openEdit: true,
+            data: id,
+        }));
     }
 
     useEffect(() => {
         fetchData();
-    },[]);
+    },[isOpen.modalEdit, isOpen.modalAdd]);
 
     return (
         <Box>
@@ -80,7 +87,7 @@ export default function HomeTable() {
                 marginBottom: 2,
             }}>
                 <Button variant={"contained"} onClick={() => {
-                    dispatch(setUser('asasasas'));
+                    dispatch(setModal({ openAdd: true, openEdit: false, data: '' }));
                 }}>Add</Button>
             </Box>
             <TableContainer component={Paper}>
@@ -98,7 +105,7 @@ export default function HomeTable() {
                     <TableBody>
                         {rows.map((row) => (
                             <TableRow
-                                key={row.name}
+                                key={row.id}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
                                 <TableCell sx={{
@@ -126,6 +133,7 @@ export default function HomeTable() {
                 </Table>
             </TableContainer>
 
+            <HomeAdd />
             <HomeEdit/>
 
         </Box>

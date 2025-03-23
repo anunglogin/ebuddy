@@ -19,11 +19,15 @@ const initialUserState: UserState = {
 };
 
 export interface ModalState {
-    modal: boolean;
+    modalAdd: boolean;
+    modalEdit: boolean;
+    data: string;
 }
 
 const initialModal: ModalState = {
-    modal: false,
+    modalAdd: false,
+    modalEdit: false,
+    data: '',
 }
 
 const authReducer = createReducer(initialState, (builder) => {
@@ -49,10 +53,14 @@ const userReducer = createReducer(initialUserState, (builder) => {
 const modalReducer = createReducer(initialModal, (builder) => {
     builder
         .addCase(setModal, (state, action) => {
-            state.modal = action.payload;
+            state.modalAdd = action.payload.openAdd;
+            state.modalEdit = action.payload.openEdit;
+            state.data = action.payload.data;
         })
         .addCase(clearModal, (state) => {
-            state.modal = false;
+            state.modalAdd = false;
+            state.modalEdit = false;
+            state.data = '';
         });
 });
 
