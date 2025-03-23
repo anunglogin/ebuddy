@@ -4,7 +4,7 @@ import {userRouter} from "../routes/userRoutes";
 import {authRouter} from "../routes/authRoutes";
 
 const app: Application = express();
-const port = 8000;
+const port = 8080;
 
 app.use(bodyParser.json());
 app.use("/users", userRouter);

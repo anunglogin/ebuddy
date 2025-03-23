@@ -1,12 +1,27 @@
 'use client';
 
-import {Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
+import {
+    Box,
+    Button,
+    Dialog,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow
+} from "@mui/material";
 import {useEffect, useState} from "react";
 import { User } from "@repo/interfaces/user";
 import {DeleteOutlineTwoTone, EditOutlined} from "@mui/icons-material";
+import {useDispatch} from "react-redux";
+import {setModal, setUser} from "../../store/actions";
+import HomeEdit from "../molecules/HomeEdit";
 
 export default function HomeTable() {
     const [rows, setRows] = useState<User[]>([]);
+    const dispatch = useDispatch();
 
     const fetchData = async () => {
         try {
@@ -28,6 +43,31 @@ export default function HomeTable() {
         }
     }
 
+    const handleDelete = async (id: string) => {
+        try {
+            const response = await fetch(`/apis/users?id=${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': 'Bearer test',
+                    'Content-Type': 'application/json',
+                },
+            });
+            const {message} = await response.json();
+            if (!response.ok) {
+                alert(message);
+                return;
+            }
+            alert('Success to delete');
+            fetchData();
+        } catch (e) {
+            alert('Failed to delete '+e);
+        }
+    }
+
+    const handleEdit = (id: string) => {
+        dispatch(setModal(true));
+    }
+
     useEffect(() => {
         fetchData();
     },[]);
@@ -39,7 +79,9 @@ export default function HomeTable() {
                 justifyContent: 'flex-end',
                 marginBottom: 2,
             }}>
-                <Button variant={"contained"} onClick={fetchData}>Add</Button>
+                <Button variant={"contained"} onClick={() => {
+                    dispatch(setUser('asasasas'));
+                }}>Add</Button>
             </Box>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -64,10 +106,10 @@ export default function HomeTable() {
                                     justifyContent: 'space-around',
                                     width: 100,
                                 }}>
-                                    <Button variant={"text"} size={"small"}>
+                                    <Button variant={"text"} size={"small"} onClick={() => handleEdit(row.id)}>
                                         <EditOutlined />
                                     </Button>
-                                    <Button variant={"text"} size={"small"}>
+                                    <Button variant={"text"} size={"small"} onClick={() => handleDelete(row.id)}>
                                         <DeleteOutlineTwoTone />
                                     </Button>
                                 </TableCell>
@@ -83,6 +125,9 @@ export default function HomeTable() {
                     </TableBody>
                 </Table>
             </TableContainer>
+
+            <HomeEdit/>
+
         </Box>
     );
 }

@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack --port 3002",
+    "dev": "next dev --turbopack --port 3005",
     "build": "next build",
     "start": "next start",
     "lint": "next lint --max-warnings 0",
@@ -18,12 +18,13 @@
     "@mui/material": "^6.4.8",
     "@mui/material-nextjs": "^6.4.3",
     "@reduxjs/toolkit": "^2.6.1",
+    "@repo/interfaces": "workspace:*",
     "@repo/ui": "workspace:*",
+    "js-cookie": "^3.0.5",
     "next": "^15.2.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-redux": "^9.2.0",
-    "@repo/interfaces": "workspace:*"
+    "react-redux": "^9.2.0"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
